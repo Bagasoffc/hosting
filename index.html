@@ -8,17 +8,20 @@
   <style>
     :root {
       --primary: #38bdf8;
-      --primary-2: #0ea5e9;
+      --primary-dark: #0ea5e9;
+      --secondary: #8b5cf6;
       --bg: #0b1224;
       --card: #1e293b;
       --text: #e2e8f0;
-      --muted: #a0aec0;
+      --text-light: #94a3b8;
       --border: rgba(255, 255, 255, 0.12);
       --ok: #10b981;
       --err: #ef4444;
-      --radius: clamp(12px, 1.5vw, 20px);
-      --gap: clamp(14px, 2vw, 30px);
-      --pad: clamp(18px, 2vw, 32px);
+      --warning: #f59e0b;
+      --radius: 16px;
+      --gap: 24px;
+      --pad: 32px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     * {
@@ -32,129 +35,394 @@
     }
 
     body {
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      background: linear-gradient(135deg, #0b1224 0%, #172032 100%);
+      font-family: 'Poppins', 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
       color: var(--text);
       min-height: 100vh;
-      overflow-x: hidden;
       line-height: 1.6;
+      overflow-x: hidden;
     }
 
-    .container {
-      width: min(100%, 1200px);
-      margin: 0 auto;
-      padding: var(--pad);
-    }
-
-    header {
-      padding: 1.5rem 0;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 2rem;
-    }
-
-    .header-content {
+    .preloader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg);
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
+      z-index: 9999;
+      transition: opacity 0.5s, visibility 0.5s;
     }
 
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .logo i {
-      font-size: 2rem;
-      color: var(--primary);
-    }
-
-    .logo h1 {
-      font-size: 1.8rem;
+    .loader-text {
+      font-size: 3rem;
       font-weight: 800;
-      background: linear-gradient(to right, var(--primary), var(--primary-2));
+      display: flex;
+      gap: 5px;
+    }
+
+    .loader-deline {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
     }
 
-    .nav-links {
+    .loader-cloud {
+      color: var(--text);
+    }
+
+    .container {
+      width: min(100%, 1200px);
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(11, 18, 36, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      z-index: 1000;
+      padding: 1.2rem 0;
+      transition: var(--transition);
+    }
+
+    .navbar.scrolled {
+      padding: 1rem 0;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .nav-container {
       display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-logo {
+      font-size: 1.8rem;
+      font-weight: 800;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .nav-logo span {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-link {
+      color: var(--text-light);
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+      position: relative;
+      padding: 5px 0;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary);
+      transition: width 0.3s;
+    }
+
+    .nav-link:hover {
+      color: var(--text);
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    .nav-controls {
+      display: flex;
+      align-items: center;
       gap: 1.5rem;
     }
 
-    .nav-links a {
-      color: var(--text);
-      text-decoration: none;
-      font-weight: 600;
-      transition: color 0.3s;
-    }
-
-    .nav-links a:hover {
-      color: var(--primary);
-    }
-
-    .hero {
-      text-align: center;
-      padding: 3rem 0;
-      margin-bottom: 3rem;
-    }
-
-    .hero h2 {
-      font-size: clamp(2rem, 4vw, 3.5rem);
-      font-weight: 800;
-      margin-bottom: 1rem;
-      line-height: 1.2;
-    }
-
-    .hero p {
-      font-size: clamp(1rem, 2vw, 1.2rem);
-      color: var(--muted);
-      max-width: 700px;
-      margin: 0 auto 2rem;
-    }
-
-    .cta-button {
-      display: inline-block;
-      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+    .nav-cta {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       color: white;
-      padding: 0.8rem 2rem;
+      padding: 10px 24px;
       border-radius: var(--radius);
       text-decoration: none;
-      font-weight: 700;
-      font-size: 1.1rem;
-      transition: all 0.3s ease;
+      font-weight: 600;
+      transition: var(--transition);
       box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
     }
 
-    .cta-button:hover {
-      transform: translateY(-3px);
+    .nav-cta:hover {
+      transform: translateY(-2px);
       box-shadow: 0 8px 25px rgba(56, 189, 248, 0.4);
     }
 
-    section {
-      margin-bottom: 4rem;
+    .theme-toggle {
+      background: var(--card);
+      border: none;
+      color: var(--text);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
     }
 
-    .section-header {
+    .theme-toggle:hover {
+      background: var(--primary);
+      color: white;
+      transform: rotate(30deg);
+    }
+
+    .hamburger {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .hero {
+      padding: 180px 0 100px;
       text-align: center;
-      margin-bottom: 2.5rem;
+      background: linear-gradient(135deg, rgba(11, 18, 36, 0.9), rgba(30, 41, 59, 0.8));
+      position: relative;
+      overflow: hidden;
     }
 
-    .section-header h2 {
-      font-size: clamp(1.8rem, 3vw, 2.5rem);
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><path fill="%2338bdf8" opacity="0.05" d="M0,0L1000,0L1000,1000L0,1000Z"/></svg>');
+      background-size: cover;
+      z-index: -1;
+    }
+
+    .hero-title {
+      font-size: clamp(2.5rem, 5vw, 4rem);
       font-weight: 800;
-      margin-bottom: 0.5rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+      background: linear-gradient(135deg, var(--text), var(--primary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
     }
 
-    .section-header p {
-      color: var(--muted);
+    .hero-subtitle {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: var(--text-light);
+      max-width: 700px;
+      margin: 0 auto 2.5rem;
+    }
+
+.hero-badges {
+  display: flex;
+  gap: 0.8rem;
+  margin-top: 2rem;
+  padding-bottom: 0.5rem;
+  overflow-x: auto;
+  justify-content: center;
+  scrollbar-width: thin;              
+}
+
+.hero-badges::-webkit-scrollbar {
+  height: 6px;
+}
+.hero-badges::-webkit-scrollbar-track {
+  background: transparent;
+}
+.hero-badges::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.6);
+  border-radius: 999px;
+}
+
+.badge {
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  padding: 10px 16px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text);
+  white-space: nowrap;      
+  transition: var(--transition);
+}
+
+.badge:hover {
+  transform: translateY(-3px);
+  background: rgba(56, 189, 248, 0.18);
+  border-color: var(--primary);
+}
+
+    .badge i {
+      color: var(--primary);
+    }
+
+    section {
+      padding: 80px 0;
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 4vw, 3rem);
+      text-align: center;
+      margin-bottom: 1rem;
+      font-weight: 800;
+    }
+
+    .section-title span {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .section-subtitle {
+      text-align: center;
+      color: var(--text-light);
+      max-width: 700px;
+      margin: 0 auto 3rem;
       font-size: 1.1rem;
     }
 
-    .packages-grid {
+    .features-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: var(--gap);
+      margin-top: 3rem;
+    }
+
+    .feature-item {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: var(--pad);
+      border: 1px solid var(--border);
+      transition: var(--transition);
+      text-align: center;
+    }
+
+    .feature-item:hover {
+      transform: translateY(-10px);
+      border-color: var(--primary);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .feature-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      font-size: 1.5rem;
+      color: white;
+    }
+
+    .feature-item h3 {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+
+    .feature-item p {
+      color: var(--text-light);
+      font-size: 0.95rem;
+    }
+
+    .package-toggle {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin: 3rem 0 4rem;
+      flex-wrap: wrap;
+    }
+
+    .toggle-btn {
+      background: var(--card);
+      border: 2px solid var(--border);
+      color: var(--text-light);
+      padding: 15px 30px;
+      border-radius: var(--radius);
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .toggle-btn.active {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(56, 189, 248, 0.3);
+    }
+
+    .toggle-btn:hover:not(.active) {
+      border-color: var(--primary);
+      color: var(--text);
+      transform: translateY(-2px);
+    }
+
+    .toggle-btn i {
+      font-size: 1.1rem;
+    }
+
+    .package-container {
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .package-container.active {
+      display: block;
+    }
+
+    .packages {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
       gap: var(--gap);
     }
 
@@ -163,15 +431,16 @@
       border-radius: var(--radius);
       padding: var(--pad);
       border: 1px solid var(--border);
-      transition: all 0.3s ease;
+      transition: var(--transition);
       position: relative;
-      overflow: hidden;
+      display: flex;
+      flex-direction: column;
     }
 
     .package-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      transform: translateY(-10px);
       border-color: var(--primary);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
     }
 
     .package-card.featured {
@@ -180,202 +449,348 @@
     }
 
     .package-card.featured:hover {
-      transform: scale(1.05) translateY(-5px);
+      transform: scale(1.05) translateY(-10px);
     }
 
     .package-badge {
       position: absolute;
-      top: 0;
-      right: 0;
-      background: var(--primary);
+      top: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       color: white;
-      padding: 0.3rem 1rem;
+      padding: 5px 15px;
+      border-radius: 20px;
       font-size: 0.8rem;
-      font-weight: 700;
-      border-bottom-left-radius: var(--radius);
-    }
-
-    .package-header {
-      margin-bottom: 1.5rem;
-      text-align: center;
+      font-weight: 600;
     }
 
     .package-name {
       font-size: 1.5rem;
       font-weight: 700;
-      margin-bottom: 0.5rem;
-    }
-
-    .package-price {
-      font-size: 2rem;
-      font-weight: 800;
-      color: var(--primary);
-    }
-
-    .package-price span {
-      font-size: 1rem;
-      color: var(--muted);
-    }
-
-    .package-features {
-      list-style: none;
-      margin-bottom: 1.5rem;
-    }
-
-    .package-features li {
-      padding: 0.5rem 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      margin-bottom: 1rem;
+      color: var(--text);
       display: flex;
       align-items: center;
+      gap: 10px;
     }
 
-    .package-features li:last-child {
+    .package-name i {
+      color: var(--primary);
+      font-size: 1.3rem;
+    }
+
+    .package-specs {
+      list-style: none;
+      margin-bottom: 1.5rem;
+      flex-grow: 1;
+    }
+
+    .package-specs li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .package-specs li:last-child {
       border-bottom: none;
     }
 
-    .package-features i {
-      color: var(--ok);
-      margin-right: 0.5rem;
+    .package-specs i {
+      color: var(--primary);
+      width: 20px;
     }
 
-    .package-button {
+    .price {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+    }
+
+    .price-period {
+      font-size: 1rem;
+      color: var(--text-light);
+      font-weight: 400;
+    }
+
+    .buy-btn {
       display: block;
       width: 100%;
       text-align: center;
-      background: rgba(56, 189, 248, 0.1);
-      color: var(--primary);
-      border: 1px solid var(--primary);
-      padding: 0.8rem;
-      border-radius: var(--radius);
-      font-weight: 700;
-      text-decoration: none;
-      transition: all 0.3s ease;
-    }
-
-    .package-button:hover {
-      background: var(--primary);
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       color: white;
+      padding: 15px;
+      border-radius: var(--radius);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
     }
 
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: var(--gap);
+    .buy-btn:hover:not(.disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(56, 189, 248, 0.4);
     }
 
-    .feature-card {
+    .buy-btn.disabled {
+      background: var(--err);
+      cursor: not-allowed;
+      opacity: 0.7;
+      transform: none !important;
+    }
+
+    .buy-btn.disabled i {
+      color: white !important;
+    }
+
+    .faq-container {
+      max-width: 800px;
+      margin: 3rem auto 0;
+    }
+
+    .faq-item {
       background: var(--card);
       border-radius: var(--radius);
-      padding: var(--pad);
-      text-align: center;
+      margin-bottom: 1rem;
+      overflow: hidden;
       border: 1px solid var(--border);
-      transition: all 0.3s ease;
+      transition: var(--transition);
     }
 
-    .feature-card:hover {
-      transform: translateY(-5px);
+    .faq-item:hover {
       border-color: var(--primary);
     }
 
-    .feature-icon {
-      font-size: 2.5rem;
-      color: var(--primary);
-      margin-bottom: 1rem;
-    }
-
-    .feature-card h3 {
-      font-size: 1.3rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .feature-card p {
-      color: var(--muted);
-    }
-
-    .contact-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: var(--gap);
-    }
-
-    .contact-info {
-      background: var(--card);
-      border-radius: var(--radius);
-      padding: var(--pad);
-      border: 1px solid var(--border);
-    }
-
-    .contact-info h3 {
-      margin-bottom: 1.5rem;
-      font-size: 1.5rem;
-    }
-
-    .contact-item {
-      display: flex;
-      align-items: center;
-      margin-bottom: 1rem;
-    }
-
-    .contact-item i {
-      font-size: 1.2rem;
-      color: var(--primary);
-      margin-right: 1rem;
-      width: 30px;
-    }
-
-    .contact-link {
+    .faq-question {
+      width: 100%;
+      background: none;
+      border: none;
+      padding: 1.5rem;
+      text-align: left;
       color: var(--text);
-      text-decoration: none;
-      transition: color 0.3s;
+      font-size: 1.1rem;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
     }
 
-    .contact-link:hover {
+    .faq-question i {
+      transition: transform 0.3s;
       color: var(--primary);
+    }
+
+    .faq-item.active .faq-question i {
+      transform: rotate(180deg);
+    }
+
+    .faq-answer {
+      padding: 0 1.5rem;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    .faq-item.active .faq-answer {
+      padding-bottom: 1.5rem;
+      max-height: 500px;
+    }
+
+    .faq-answer p {
+      color: var(--text-light);
+      line-height: 1.8;
+    }
+
+    .cta-section {
+      text-align: center;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      border-radius: var(--radius);
+      padding: 4rem;
+      margin: 4rem 0;
+    }
+
+    .cta-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      color: white;
+    }
+
+    .cta-subtitle {
+      font-size: 1.2rem;
+      color: rgba(255, 255, 255, 0.9);
+      max-width: 700px;
+      margin: 0 auto;
     }
 
     footer {
       background: rgba(0, 0, 0, 0.3);
-      padding: 2rem 0;
+      padding: 4rem 0 2rem;
       text-align: center;
-      margin-top: 3rem;
       border-top: 1px solid var(--border);
     }
 
-    .footer-content {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 1rem;
+    .footer-logo {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      color: var(--text);
     }
 
-    .copyright {
-      color: var(--muted);
+    .footer-logo span {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    footer p {
+      color: var(--text-light);
+      margin-bottom: 2rem;
+      max-width: 500px;
+      margin: 0 auto 2rem;
     }
 
     .social-links {
       display: flex;
-      gap: 1rem;
+      justify-content: center;
+      gap: 1.5rem;
+      margin: 2rem 0 3rem;
     }
 
-    .social-link {
-      color: var(--muted);
+    .social-links a {
+      width: 50px;
+      height: 50px;
+      background: var(--card);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text);
+      text-decoration: none;
       font-size: 1.2rem;
-      transition: color 0.3s;
+      transition: var(--transition);
+      border: 1px solid var(--border);
     }
 
-    .social-link:hover {
-      color: var(--primary);
+    .social-links a:hover {
+      background: var(--primary);
+      color: white;
+      transform: translateY(-5px);
+      border-color: var(--primary);
+    }
+
+    .copyright {
+      color: var(--text-light);
+      font-size: 0.9rem;
+      margin-top: 2rem;
+    }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 50px;
+      height: 50px;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: var(--transition);
+      z-index: 100;
+      border: none;
+      cursor: pointer;
+    }
+
+    .back-to-top.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .back-to-top:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(56, 189, 248, 0.4);
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 1024px) {
+      .packages {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      }
     }
 
     @media (max-width: 768px) {
-      .header-content {
-        flex-direction: column;
-        gap: 1rem;
+      .hamburger {
+        display: block;
       }
 
-      .nav-links {
+      .nav-menu {
+        position: fixed;
+        top: 80px;
+        left: 0;
+        width: 100%;
+        background: var(--bg);
+        flex-direction: column;
+        padding: 2rem;
         gap: 1rem;
+        transform: translateY(-100%);
+        opacity: 0;
+        visibility: hidden;
+        transition: var(--transition);
+        border-bottom: 1px solid var(--border);
+        z-index: 999;
+      }
+
+      .nav-menu.active {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .nav-cta {
+        display: none;
+      }
+
+      .hero {
+        padding: 150px 0 80px;
+      }
+
+      .hero-badges {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .package-toggle {
+        flex-direction: column;
+      }
+
+      .toggle-btn {
+        width: 100%;
+        justify-content: center;
       }
 
       .package-card.featured {
@@ -383,323 +798,541 @@
       }
 
       .package-card.featured:hover {
-        transform: translateY(-5px);
+        transform: translateY(-10px);
       }
 
-      .footer-content {
-        flex-direction: column;
+      .cta-section {
+        padding: 3rem 2rem;
+      }
+
+      .cta-title {
+        font-size: 2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .packages {
+        grid-template-columns: 1fr;
+      }
+
+      .feature-item {
+        padding: 1.5rem;
+      }
+
+      .hero-title {
+        font-size: 2rem;
+      }
+
+      .section-title {
+        font-size: 1.8rem;
+      }
+.theme-toggle {
+    display: none !important;
+}
+
+
+      .price {
+        font-size: 2rem;
       }
     }
   </style>
 </head>
 <body>
-  <header>
+  <div class="preloader">
+    <div class="loader-text">
+      <span class="loader-deline">Deline</span><span class="loader-cloud">Cloud</span>
+    </div>
+  </div>
+
+  <nav class="navbar" id="navbar">
     <div class="container">
-      <div class="header-content">
-        <div class="logo">
-          <i class="fas fa-server"></i>
-          <h1>Deline Cloud</h1>
+      <div class="nav-container">
+        <a href="#" class="nav-logo">Deline<span>Cloud</span></a>
+        
+        <ul class="nav-menu" id="nav-menu">
+          <li><a href="#home" class="nav-link">Beranda</a></li>
+          <li><a href="#features" class="nav-link">Fitur</a></li>
+          <li><a href="#pricing" class="nav-link">Paket</a></li>
+          <li><a href="#faq" class="nav-link">FAQ</a></li>
+          <li><a href="https://whatsapp.com/channel/0029VbB8WYS4CrfhJCelw33j" class="nav-link">Channel</a></li>
+        </ul>
+        
+        <div class="nav-controls">
+          <a href="#pricing" class="nav-cta">Mulai Sekarang</a>
+          <button class="theme-toggle" id="theme-toggle">
+            <i class="fas fa-moon"></i>
+          </button>
+          <button class="hamburger" id="hamburger">
+            <i class="fas fa-bars"></i>
+          </button>
         </div>
-        <nav class="nav-links">
-          <a href="#deline">Panel</a>
-          <a href="#vps">VPS</a>
-          <a href="#features">Kelebihan</a>
-          <a href="#contact">Kontak</a>
-        </nav>
       </div>
+    </div>
+  </nav>
+
+  <header class="hero" id="home">
+    <div class="container">
+      <h1 class="hero-title fade-in">Solusi Panel Pterodactyl & VPS Terbaik</h1>
+      <p class="hero-subtitle fade-in" style="transition-delay: 0.1s;">Nikmati pengalaman hosting yang smooth dengan performa optimal dan dukungan teknis yang responsif untuk kebutuhan server Anda.</p>
     </div>
   </header>
 
-<main class="container">
-    <section class="hero">
-      <h2>Layanan Vps Terbaik dan Panel Pterodactyl</h2>
-      <p>Nikmati pengalaman hosting yang stabil, cepat, dan terpercaya dengan berbagai pilihan paket sesuai kebutuhan Anda.</p>
-      <a href="#deline" class="cta-button">Lihat Paket</a>
-    </section>
-
-    <section id="deline">
-      <div class="section-header">
-        <h2>Paket Panel</h2>
-        <p>Pilih paket yang sesuai dengan kebutuhan Anda</p>
-      </div>
-      <div class="packages-grid">
-        <div class="package-card">
-          <div class="package-header">
-            <div class="package-name">Deline 1</div>
-            <div class="package-price">5K<span>/bulan</span></div>
-          </div>
-          <ul class="package-features">
-            <li><i class="fas fa-check"></i> 1 GB RAM</li>
-            <li><i class="fas fa-check"></i> 2 GB Disk</li>
-            <li><i class="fas fa-check"></i> 50% CPU</li>
-            <li><i class="fas fa-check"></i> DDoS Protection</li>
-          </ul>
-          <a href="https://wa.me/84878369586?text=Halo,%20saya%20tertarik%20dengan%20paket%20Deline%201" class="package-button">Pesan Sekarang</a>
-        </div>
-
-        <div class="package-card">
-          <div class="package-header">
-            <div class="package-name">Deline 2</div>
-            <div class="package-price">10K<span>/bulan</span></div>
-          </div>
-          <ul class="package-features">
-            <li><i class="fas fa-check"></i> 2 GB RAM</li>
-            <li><i class="fas fa-check"></i> 5 GB Disk</li>
-            <li><i class="fas fa-check"></i> 100% CPU</li>
-            <li><i class="fas fa-check"></i> DDoS Protection</li>
-          </ul>
-          <a href="https://wa.me/84878369586?text=Halo,%20saya%20tertarik%20dengan%20paket%20Deline%202" class="package-button">Pesan Sekarang</a>
-        </div>
-
-        <div class="package-card">
-          <div class="package-header">
-            <div class="package-name">Deline 3</div>
-            <div class="package-price">15K<span>/bulan</span></div>
-          </div>
-          <ul class="package-features">
-            <li><i class="fas fa-check"></i> 3 GB RAM</li>
-            <li><i class="fas fa-check"></i> 7 GB Disk</li>
-            <li><i class="fas fa-check"></i> 150% CPU</li>
-            <li><i class="fas fa-check"></i> DDoS Protection</li>
-          </ul>
-          <a href="https://wa.me/84878369586?text=Halo,%20saya%20tertarik%20dengan%20paket%20Deline%203" class="package-button">Pesan Sekarang</a>
-        </div>
-
-        <div class="package-card">
-          <div class="package-header">
-            <div class="package-name">Deline 4</div>
-            <div class="package-price">20K<span>/bulan</span></div>
-          </div>
-          <ul class="package-features">
-            <li><i class="fas fa-check"></i> 4 GB RAM</li>
-            <li><i class="fas fa-check"></i> 10 GB Disk</li>
-            <li><i class="fas fa-check"></i> 200% CPU</li>
-            <li><i class="fas fa-check"></i> DDoS Protection</li>
-          </ul>
-          <a href="https://wa.me/84878369586?text=Halo,%20saya%20tertarik%20dengan%20paket%20Deline%204" class="package-button">Pesan Sekarang</a>
-        </div>
-
-        <div class="package-card">
-          <div class="package-header">
-            <div class="package-name">Deline 5</div>
-            <div class="package-price">25K<span>/bulan</span></div>
-          </div>
-          <ul class="package-features">
-            <li><i class="fas fa-check"></i> 5 GB RAM</li>
-            <li><i class="fas fa-check"></i> 13 GB Disk</li>
-            <li><i class="fas fa-check"></i> 250% CPU</li>
-            <li><i class="fas fa-check"></i> DDoS Protection</li>
-          </ul>
-          <a href="https://wa.me/84878369586?text=Halo,%20saya%20tertarik%20dengan%20paket%20Deline%205" class="package-button">Pesan Sekarang</a>
-        </div>
-
-        <div class="package-card">
-          <div class="package-header">
-            <div class="package-name">Deline 6</div>
-            <div class="package-price">30K<span>/bulan</span></div>
-          </div>
-          <ul class="package-features">
-            <li><i class="fas fa-check"></i> 6 GB RAM</li>
-            <li><i class="fas fa-check"></i> 15 GB Disk</li>
-            <li><i class="fas fa-check"></i> 300% CPU</li>
-            <li><i class="fas fa-check"></i> DDoS Protection</li>
-          </ul>
-          <a href="https://wa.me/84878369586?text=Halo,%20saya%20tertarik%20dengan%20paket%20Deline%206" class="package-button">Pesan Sekarang</a>
-        </div>
-
-        <div class="package-card">
-          <div class="package-header">
-            <div class="package-name">Deline 7</div>
-            <div class="package-price">35K<span>/bulan</span></div>
-          </div>
-          <ul class="package-features">
-            <li><i class="fas fa-check"></i> 7 GB RAM</li>
-            <li><i class="fas fa-check"></i> 20 GB Disk</li>
-            <li><i class="fas fa-check"></i> 350% CPU</li>
-            <li><i class="fas fa-check"></i> DDoS Protection</li>
-          </ul>
-          <a href="https://wa.me/84878369586?text=Halo,%20saya%20tertarik%20dengan%20paket%20Deline%207" class="package-button">Pesan Sekarang</a>
-        </div>
-      </div>
-    </section>
-
-<section id="vps">
-  <div class="section-header">
-    <h2>Paket VPS</h2>
-    <p>VPS berkualitas tinggi dengan performa optimal</p>
-  </div>
-  <div class="packages-grid">
-
-    <div class="package-card">
-      <div class="package-header">
-        <div class="package-name">Paket 1</div>
-        <div class="package-price">55K<span>/bulan</span></div>
-      </div>
-      <ul class="package-features">
-        <li><i class="fas fa-check"></i> RAM 4 GB</li>
-        <li><i class="fas fa-check"></i> 2 CPU Core</li>
-        <li><i class="fas fa-check"></i> 25 GB NVMe</li>
-        <li><i class="fas fa-check"></i> Bandwidth 4 TB</li>
-        <li><i class="fas fa-check"></i> Included IPv4</li>
-        <li><i class="fas fa-check"></i> Lokasi: US</li>
-        <li><i class="fas fa-check"></i> DDoS Protection</li>
-      </ul>
-      <a href="https://wa.me/84878369586?text=Halo,%20saya%20tertarik%20dengan%20paket%20VPS%201" class="package-button">Pesan Sekarang</a>
-    </div>
-
-    <div class="package-card">
-      <div class="package-header">
-        <div class="package-name">Paket 2</div>
-        <div class="package-price">70K<span>/bulan</span></div>
-      </div>
-      <ul class="package-features">
-        <li><i class="fas fa-check"></i> RAM 8 GB</li>
-        <li><i class="fas fa-check"></i> 4 CPU Core</li>
-        <li><i class="fas fa-check"></i> 50 GB NVMe</li>
-        <li><i class="fas fa-check"></i> Bandwidth 4 TB</li>
-        <li><i class="fas fa-check"></i> Included IPv4</li>
-        <li><i class="fas fa-check"></i> Lokasi: US</li>
-        <li><i class="fas fa-check"></i> DDoS Protection</li>
-      </ul>
-      <a href="https://wa.me/84878369586?text=Halo,%20saya%20tertarik%20dengan%20paket%20VPS%202" class="package-button">Pesan Sekarang</a>
-    </div>
-
-    <div class="package-card featured">
-      <div class="package-badge">TERBAIK</div>
-      <div class="package-header">
-        <div class="package-name">Paket 3</div>
-        <div class="package-price">140K<span>/bulan</span></div>
-      </div>
-      <ul class="package-features">
-        <li><i class="fas fa-check"></i> RAM 16 GB</li>
-        <li><i class="fas fa-check"></i> 6 CPU Core</li>
-        <li><i class="fas fa-check"></i> 100 GB NVMe</li>
-        <li><i class="fas fa-check"></i> Bandwidth 8 TB</li>
-        <li><i class="fas fa-check"></i> Included IPv4</li>
-        <li><i class="fas fa-check"></i> Lokasi: US</li>
-        <li><i class="fas fa-check"></i> DDoS Protection</li>
-      </ul>
-      <a href="https://wa.me/84878369586?text=Halo,%20saya%20tertarik%20dengan%20paket%20VPS%203" class="package-button">Pesan Sekarang</a>
-    </div>
-
-  </div>
-</section>
-
+  <main>
     <section id="features">
-      <div class="section-header">
-        <h2>Kelebihan Layanan Kami</h2>
-      </div>
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="fas fa-shield-alt"></i>
+      <div class="container">
+        <h2 class="section-title fade-in">Keunggulan Layanan <span>Kami</span></h2>
+        <p class="section-subtitle fade-in">Kami memberikan yang terbaik untuk mendukung project Anda dengan berbagai kelebihan unggulan.</p>
+        
+        <div class="features-grid">
+          <div class="feature-item fade-in">
+            <div class="feature-icon"><i class="fas fa-tachometer-alt"></i></div>
+            <h3>Server Super Cepat</h3>
+            <p>Ditenagai oleh NVMe SSD yang memberikan kecepatan akses data yang luar biasa.</p>
           </div>
-          <h3>Server Stabil 24/7</h3>
-          <p>Server kami selalu online dengan uptime mencapai 99.9%</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="fas fa-gavel"></i>
+          
+          <div class="feature-item fade-in" style="transition-delay: 0.1s;">
+            <div class="feature-icon"><i class="fas fa-shield"></i></div>
+            <h3>Proteksi Maksimal</h3>
+            <p>Sistem keamanan berlapis menjaga data Anda tetap aman dari ancaman luar.</p>
           </div>
-          <h3>VPS Legal</h3>
-          <p>Menggunakan VPS legal dengan lisensi resmi</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="fas fa-award"></i>
+          
+          <div class="feature-item fade-in" style="transition-delay: 0.2s;">
+            <div class="feature-icon"><i class="fas fa-headset"></i></div>
+            <h3>Bantuan Teknis 24 Jam</h3>
+            <p>Tim support kami selalu siap membantu kapanpun Anda butuhkan.</p>
           </div>
-          <h3>Garansi Full 30 Hari</h3>
-          <p>Garansi penuh selama 30 hari untuk kepuasan Anda</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="fas fa-sync-alt"></i>
+          
+          <div class="feature-item fade-in" style="transition-delay: 0.3s;">
+            <div class="feature-icon"><i class="fas fa-cogs"></i></div>
+            <h3>Panel User-Friendly</h3>
+            <p>Kelola server dengan mudah melalui panel Pterodactyl yang modern.</p>
           </div>
-          <h3>Bisa Diperpanjang Kapan Saja</h3>
-          <p>Fleksibilitas penuh dalam memperpanjang layanan</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="fas fa-download"></i>
+          
+          <div class="feature-item fade-in" style="transition-delay: 0.4s;">
+            <div class="feature-icon"><i class="fas fa-network-wired"></i></div>
+            <h3>Koneksi Stabil</h3>
+            <p>Jaringan berkualitas tinggi dengan latensi rendah untuk pengalaman terbaik.</p>
           </div>
-          <h3>Free Request OS</h3>
-          <p>Dapat meminta sistem operasi sesuai kebutuhan</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="fas fa-cogs"></i>
+          
+          <div class="feature-item fade-in" style="transition-delay: 0.5s;">
+            <div class="feature-icon"><i class="fas fa-bolt"></i></div>
+            <h3>Uptime Konsisten</h3>
+            <p>Server yang selalu online dengan performa yang dapat diandalkan setiap saat.</p>
           </div>
-          <h3>Gratis Install Panel</h3>
-          <p>Gratis instalasi panel Pterodactyl untuk kemudahan Anda</p>
         </div>
       </div>
     </section>
 
-    <section id="contact">
-      <div class="section-header">
-        <h2>Hubungi Kami</h2>
-        <p>Siap melayani kebutuhan hosting Anda</p>
-      </div>
-      <div class="contact-container">
-        <div class="contact-info">
-          <h3>Informasi Kontak</h3>
-          <div class="contact-item">
-            <i class="fab fa-whatsapp"></i>
-            <a href="https://wa.me/84878369586" class="contact-link">+84 878369586</a>
-          </div>
-          <div class="contact-item">
-            <i class="fab fa-whatsapp"></i>
-            <a href="https://whatsapp.com/channel/0029VbB8WYS4CrfhJCelw33j" class="contact-link">Channel WhatsApp</a>
-          </div>
-          <div class="contact-item">
-            <i class="fas fa-comments"></i>
-            <span>Langsung chat untuk informasi lebih lanjut</span>
+    <section id="pricing">
+      <div class="container">
+        <h2 class="section-title fade-in">Paket Layanan <span>Terjangkau</span></h2>
+        <p class="section-subtitle fade-in">Pilih paket yang sesuai dengan kebutuhan Anda. Dapatkan performa optimal dengan harga bersahabat.</p>
+
+        <div class="package-toggle fade-in">
+          <button class="toggle-btn active" data-package="panel">
+            <i class="fas fa-server"></i> Panel Pterodactyl
+          </button>
+          <button class="toggle-btn" data-package="vps">
+            <i class="fas fa-cube"></i> VPS Server
+          </button>
+        </div>
+
+        <div id="panel-package" class="package-container active">
+          <div class="packages">
+            <div class="package-card fade-in">
+              <h3 class="package-name"><i class="fas fa-server"></i> Deline 1</h3>
+              <p class="package-description" style="color: var(--text-light); margin-bottom: 1rem; font-size: 0.9rem;">Paket dasar ideal untuk bot kecil atau project awal</p>
+              <ul class="package-specs">
+                <li><i class="fas fa-memory"></i> 1GB RAM</li>
+                <li><i class="fas fa-hdd"></i> 2GB Disk Space</li>
+                <li><i class="fas fa-microchip"></i> 50% CPU</li>
+                <li><i class="fas fa-shield-alt"></i> DDoS Protection</li>
+              </ul>
+              <p class="price">Rp 5.000<span class="price-period">/ bulan</span></p>
+              <button class="buy-btn" data-paket-id="panel-1">
+                <i class="fab fa-whatsapp"></i> Pesan Sekarang
+              </button>
+            </div>
+
+            <div class="package-card fade-in" style="transition-delay: 0.1s">
+              <h3 class="package-name"><i class="fas fa-server"></i> Deline 2</h3>
+              <p class="package-description" style="color: var(--text-light); margin-bottom: 1rem; font-size: 0.9rem;">Cocok untuk bot menengah dengan traffic sedang</p>
+              <ul class="package-specs">
+                <li><i class="fas fa-memory"></i> 2GB RAM</li>
+                <li><i class="fas fa-hdd"></i> 5GB Disk Space</li>
+                <li><i class="fas fa-microchip"></i> 100% CPU</li>
+                <li><i class="fas fa-shield-alt"></i> DDoS Protection</li>
+              </ul>
+              <p class="price">Rp 10.000<span class="price-period">/ bulan</span></p>
+              <button class="buy-btn" data-paket-id="panel-2">
+                <i class="fab fa-whatsapp"></i> Pesan Sekarang
+              </button>
+            </div>
+
+            <div class="package-card featured fade-in" style="transition-delay: 0.2s">
+              <span class="package-badge">POPULAR</span>
+              <h3 class="package-name"><i class="fas fa-server"></i> Deline 3</h3>
+              <p class="package-description" style="color: var(--text-light); margin-bottom: 1rem; font-size: 0.9rem;">Pilihan tepat untuk bot dengan performa optimal</p>
+              <ul class="package-specs">
+                <li><i class="fas fa-memory"></i> 3GB RAM</li>
+                <li><i class="fas fa-hdd"></i> 7GB Disk Space</li>
+                <li><i class="fas fa-microchip"></i> 150% CPU</li>
+                <li><i class="fas fa-shield-alt"></i> DDoS Protection</li>
+              </ul>
+              <p class="price">Rp 15.000<span class="price-period">/ bulan</span></p>
+              <button class="buy-btn" data-paket-id="panel-3">
+                <i class="fab fa-whatsapp"></i> Pesan Sekarang
+              </button>
+            </div>
+
+            <div class="package-card fade-in" style="transition-delay: 0.3s">
+              <h3 class="package-name"><i class="fas fa-server"></i> Deline 4</h3>
+              <p class="package-description" style="color: var(--text-light); margin-bottom: 1rem; font-size: 0.9rem;">Untuk kebutuhan yang membutuhkan resource lebih</p>
+              <ul class="package-specs">
+                <li><i class="fas fa-memory"></i> 4GB RAM</li>
+                <li><i class="fas fa-hdd"></i> 10GB Disk Space</li>
+                <li><i class="fas fa-microchip"></i> 200% CPU</li>
+                <li><i class="fas fa-shield-alt"></i> DDoS Protection</li>
+              </ul>
+              <p class="price">Rp 20.000<span class="price-period">/ bulan</span></p>
+              <button class="buy-btn" data-paket-id="panel-4">
+                <i class="fab fa-whatsapp"></i> Pesan Sekarang
+              </button>
+            </div>
+
+            <div class="package-card fade-in" style="transition-delay: 0.4s">
+              <h3 class="package-name"><i class="fas fa-server"></i> Deline 5</h3>
+              <p class="package-description" style="color: var(--text-light); margin-bottom: 1rem; font-size: 0.9rem;">Paket power untuk projects yang membutuhkan performa tinggi</p>
+              <ul class="package-specs">
+                <li><i class="fas fa-memory"></i> 5GB RAM</li>
+                <li><i class="fas fa-hdd"></i> 13GB Disk Space</li>
+                <li><i class="fas fa-microchip"></i> 250% CPU</li>
+                <li><i class="fas fa-shield-alt"></i> DDoS Protection</li>
+              </ul>
+              <p class="price">Rp 25.000<span class="price-period">/ bulan</span></p>
+              <button class="buy-btn" data-paket-id="panel-5">
+                <i class="fab fa-whatsapp"></i> Pesan Sekarang
+              </button>
+            </div>
+
+            <div class="package-card fade-in" style="transition-delay: 0.5s">
+              <h3 class="package-name"><i class="fas fa-server"></i> Deline 6</h3>
+              <p class="package-description" style="color: var(--text-light); margin-bottom: 1rem; font-size: 0.9rem;">Ideal untuk server dengan traffic padat</p>
+              <ul class="package-specs">
+                <li><i class="fas fa-memory"></i> 6GB RAM</li>
+                <li><i class="fas fa-hdd"></i> 15GB Disk Space</li>
+                <li><i class="fas fa-microchip"></i> 300% CPU</li>
+                <li><i class="fas fa-shield-alt"></i> DDoS Protection</li>
+              </ul>
+              <p class="price">Rp 30.000<span class="price-period">/ bulan</span></p>
+              <button class="buy-btn" data-paket-id="panel-6">
+                <i class="fab fa-whatsapp"></i> Pesan Sekarang
+              </button>
+            </div>
+
+            <div class="package-card fade-in" style="transition-delay: 0.6s">
+              <h3 class="package-name"><i class="fas fa-server"></i> Deline 7</h3>
+              <p class="package-description" style="color: var(--text-light); margin-bottom: 1rem; font-size: 0.9rem;">Solusi enterprise dengan resource maksimal</p>
+              <ul class="package-specs">
+                <li><i class="fas fa-memory"></i> 7GB RAM</li>
+                <li><i class="fas fa-hdd"></i> 20GB Disk Space</li>
+                <li><i class="fas fa-microchip"></i> 350% CPU</li>
+                <li><i class="fas fa-shield-alt"></i> DDoS Protection</li>
+              </ul>
+              <p class="price">Rp 35.000<span class="price-period">/ bulan</span></p>
+              <button class="buy-btn" data-paket-id="panel-7">
+                <i class="fab fa-whatsapp"></i> Pesan Sekarang
+              </button>
+            </div>
           </div>
         </div>
-        <div class="contact-info">
-          <h3>Pesan Cepat</h3>
-          <p>Klik tombol di bawah untuk langsung terhubung dengan kami via WhatsApp:</p>
-          <a href="https://wa.me/84878369586?text=Halo,%20saya%20ingin%20bertanya%20tentang%20layanan%20Deline%20Hosting" class="cta-button" style="display: block; margin-top: 1rem;">
-            <i class="fab fa-whatsapp"></i> Chat WhatsApp
+
+        <div id="vps-package" class="package-container">
+          <div class="packages">
+            <div class="package-card fade-in">
+              <h3 class="package-name"><i class="fas fa-cube"></i> Paket 1</h3>
+              <p class="package-description" style="color: var(--text-light); margin-bottom: 1rem; font-size: 0.9rem;">VPS entry level dengan performa stabil untuk kebutuhan dasar</p>
+              <ul class="package-specs">
+                <li><i class="fas fa-memory"></i> 4GB RAM</li>
+                <li><i class="fas fa-hdd"></i> 25GB NVMe</li>
+                <li><i class="fas fa-microchip"></i> 2 CPU Core</li>
+                <li><i class="fas fa-satellite-dish"></i> 4 TB Bandwidth</li>
+                <li><i class="fas fa-shield-alt"></i> DDoS Protection</li>
+              </ul>
+              <p class="price">Rp 55.000<span class="price-period">/ bulan</span></p>
+              <button class="buy-btn" data-paket-id="vps-1">
+                <i class="fab fa-whatsapp"></i> Pesan Sekarang
+              </button>
+            </div>
+
+            <div class="package-card fade-in" style="transition-delay: 0.1s">
+              <h3 class="package-name"><i class="fas fa-cube"></i> Paket 2</h3>
+              <p class="package-description" style="color: var(--text-light); margin-bottom: 1rem; font-size: 0.9rem;">VPS mid-range cocok untuk bisnis dan project menengah</p>
+              <ul class="package-specs">
+                <li><i class="fas fa-memory"></i> 8GB RAM</li>
+                <li><i class="fas fa-hdd"></i> 50GB NVMe</li>
+                <li><i class="fas fa-microchip"></i> 4 CPU Core</li>
+                <li><i class="fas fa-satellite-dish"></i> 4 TB Bandwidth</li>
+                <li><i class="fas fa-shield-alt"></i> DDoS Protection</li>
+              </ul>
+              <p class="price">Rp 70.000<span class="price-period">/ bulan</span></p>
+              <button class="buy-btn" data-paket-id="vps-2">
+                <i class="fab fa-whatsapp"></i> Pesan Sekarang
+              </button>
+            </div>
+
+            <div class="package-card featured fade-in" style="transition-delay: 0.2s">
+              <span class="package-badge">TERBAIK</span>
+              <h3 class="package-name"><i class="fas fa-cube"></i> Paket 3</h3>
+              <p class="package-description" style="color: var(--text-light); margin-bottom: 1rem; font-size: 0.9rem;">VPS high-performance untuk kebutuhan enterprise</p>
+              <ul class="package-specs">
+                <li><i class="fas fa-memory"></i> 16GB RAM</li>
+                <li><i class="fas fa-hdd"></i> 100GB NVMe</li>
+                <li><i class="fas fa-microchip"></i> 6 CPU Core</li>
+                <li><i class="fas fa-satellite-dish"></i> 8 TB Bandwidth</li>
+                <li><i class="fas fa-shield-alt"></i> DDoS Protection</li>
+              </ul>
+              <p class="price">Rp 140.000<span class="price-period">/ bulan</span></p>
+              <button class="buy-btn" data-paket-id="vps-3">
+                <i class="fab fa-whatsapp"></i> Pesan Sekarang
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq">
+      <div class="container">
+        <h2 class="section-title fade-in">Pertanyaan <span>Umum</span></h2>
+        <div class="faq-container">
+          <div class="faq-item fade-in">
+            <button class="faq-question">
+              <span>Metode pembayaran apa saja yang diterima?</span>
+              <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="faq-answer">
+              <p>Kami menerima pembayaran melalui QRIS yang mencakup semua dompet digital seperti Dana, OVO, GoPay, dan juga mobile banking.</p>
+            </div>
+          </div>
+          
+          <div class="faq-item fade-in">
+            <button class="faq-question">
+              <span>Berapa lama proses aktivasi server setelah pembayaran?</span>
+              <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="faq-answer">
+              <p>Server akan langsung aktif dalam hitungan menit setelah pembayaran Anda berhasil dikonfirmasi.</p>
+            </div>
+          </div>
+                    
+          <div class="faq-item fade-in">
+            <button class="faq-question">
+              <span>Apakah ada kebijakan refund?</span>
+              <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="faq-answer">
+              <p>Kami tidak menyediakan refund setelah server diaktifkan. Namun, kami memberikan garansi layanan sesuai ketentuan yang berlaku.</p>
+            </div>
+          </div>
+          
+          <div class="faq-item fade-in">
+            <button class="faq-question">
+              <span>Bagaimana cara mendapatkan bantuan teknis?</span>
+              <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="faq-answer">
+              <p>Anda dapat menghubungi tim support kami melalui WhatsApp yang tersedia 24/7 untuk bantuan teknis.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="cta-section fade-in">
+          <h2 class="cta-title">Siap Tingkatkan Performa Server Anda?</h2>
+          <p class="cta-subtitle">Jangan tunda lagi! Pilih paket terbaik kami dan rasakan perbedaan performa yang signifikan untuk project Anda.</p>
+          <a href="#pricing" class="nav-cta" style="margin-top: 2rem; display: inline-block; font-size: 1.1rem;">
+            Pilih Paket Sekarang
           </a>
         </div>
       </div>
     </section>
   </main>
 
-<footer>
-  <div class="container">
-    <div class="footer-content">
-      <div class="copyright">
-        © 2025 Deline Clarissa. All rights reserved.
-      </div>
+  <footer>
+    <div class="container">
+      <h2 class="footer-logo">Deline<span>Cloud</span></h2>
+      <p>Solusi hosting Panel Pterodactyl & VPS terpercaya.</p>
       <div class="social-links">
-        <a href="https://instagram.com/juicee90y" class="social-link">
-          <i class="fab fa-instagram"></i>
+        <a href="https://wa.me/84878369586" target="_blank" aria-label="WhatsApp">
+          <i class="fab fa-whatsapp"></i>
         </a>
-        <a href="https://t.me/juicee90y" class="social-link">
+        <a href="https://t.me/juicee90y" target="_blank" aria-label="Telegram">
           <i class="fab fa-telegram"></i>
         </a>
+        <a href="https://instagram.com/juicee90y" target="_blank" aria-label="Instagram">
+          <i class="fab fa-instagram"></i>
+        </a>
       </div>
+      <p class="copyright">© 2025 Deline Cloud. All rights reserved.</p>
     </div>
-  </div>
-</footer>
+  </footer>
+
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">
+    <i class="fas fa-arrow-up"></i>
+  </button>
 
   <script>
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const targetId = this.getAttribute('href');
-        if (targetId === '#') return;
-        
-        const targetElement = document.querySelector(targetId);
-        if (targetElement) {
-          window.scrollTo({
-            top: targetElement.offsetTop - 100,
-            behavior: 'smooth'
+    document.addEventListener('DOMContentLoaded', () => {
+      const packageStock = {
+        'panel-1': true,
+        'panel-2': true,
+        'panel-3': true,
+        'panel-4': true,
+        'panel-5': true,
+        'panel-6': true,
+        'panel-7': true,
+        'vps-1': true,
+        'vps-2': true,
+        'vps-3': true,
+      };
+
+      const checkStock = () => {
+        const buyButtons = document.querySelectorAll('.buy-btn[data-paket-id]');
+        buyButtons.forEach(button => {
+          const paketId = button.dataset.paketId;
+          const isStokAvailable = packageStock[paketId];
+
+          if (!isStokAvailable) {
+            button.classList.add('disabled');
+            button.innerHTML = '<i class="fas fa-times-circle"></i> Stok kosong';
+            
+            button.addEventListener('click', (e) => {
+              e.preventDefault();
+            });
+          } else {
+            button.addEventListener('click', () => {
+              const packageName = button.closest('.package-card').querySelector('.package-name').textContent;
+              const description = button.closest('.package-card').querySelector('.package-description').textContent;
+              const price = button.closest('.package-card').querySelector('.price').textContent;
+              const message = `Halo, saya ingin pesan paket:\n\nNama Paket: ${packageName}\nDeskripsi: ${description}\nHarga: ${price}\n\nApakah masih tersedia?`;
+              const whatsappNumber = '84878369586';
+              const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+              window.open(whatsappLink, '_blank');
+            });
+          }
+        });
+      };
+
+      checkStock();
+
+      const preloader = document.querySelector('.preloader');
+      document.body.style.overflow = 'hidden';
+
+      window.addEventListener('load', () => {
+        setTimeout(() => {
+          preloader.style.opacity = '0';
+          preloader.style.visibility = 'hidden';
+          document.body.style.overflow = 'auto';
+
+          preloader.addEventListener('transitionend', () => {
+            preloader.remove();
           });
-        }
+        }, 1500);
       });
+
+      const navbar = document.getElementById('navbar');
+      window.addEventListener('scroll', () => {
+        navbar.classList.toggle('scrolled', window.scrollY > 50);
+      });
+
+      const hamburger = document.getElementById('hamburger');
+      const navMenu = document.getElementById('nav-menu');
+      const navLinks = document.querySelectorAll('.nav-link');
+
+      hamburger.addEventListener('click', () => {
+        navMenu.classList.toggle('active');
+        hamburger.innerHTML = navMenu.classList.contains('active') 
+          ? '<i class="fas fa-times"></i>' 
+          : '<i class="fas fa-bars"></i>';
+      });
+
+      navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          navMenu.classList.remove('active');
+          hamburger.innerHTML = '<i class="fas fa-bars"></i>';
+        });
+      });
+
+      const themeToggle = document.getElementById('theme-toggle');
+      const themeIcon = themeToggle.querySelector('i');
+
+      const applyTheme = (theme) => {
+        if (theme === 'light') {
+          document.body.classList.add('light-theme');
+          themeIcon.classList.replace('fa-moon', 'fa-sun');
+        } else {
+          document.body.classList.remove('light-theme');
+          themeIcon.classList.replace('fa-sun', 'fa-moon');
+        }
+      };
+
+      const savedTheme = localStorage.getItem('theme') || 'dark';
+      applyTheme(savedTheme);
+
+      themeToggle.addEventListener('click', () => {
+        let currentTheme = document.body.classList.contains('light-theme') ? 'light' : 'dark';
+        let newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        localStorage.setItem('theme', newTheme);
+        applyTheme(newTheme);
+      });
+
+      const toggleButtons = document.querySelectorAll('.toggle-btn');
+      const packageContainers = document.querySelectorAll('.package-container');
+
+      toggleButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          toggleButtons.forEach(btn => btn.classList.remove('active'));
+          packageContainers.forEach(container => container.classList.remove('active'));
+          button.classList.add('active');
+          document.getElementById(`${button.dataset.package}-package`).classList.add('active');
+        });
+      });
+
+      const faqItems = document.querySelectorAll('.faq-item');
+      faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
+        question.addEventListener('click', () => {
+          const isActive = item.classList.contains('active');
+          faqItems.forEach(otherItem => otherItem.classList.remove('active'));
+          if (!isActive) item.classList.add('active');
+        });
+      });
+
+      const backToTopButton = document.getElementById('backToTop');
+      window.addEventListener('scroll', () => {
+        backToTopButton.classList.toggle('visible', window.scrollY > 300);
+      });
+
+      backToTopButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      const fadeInElements = document.querySelectorAll('.fade-in');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      
+      fadeInElements.forEach(el => observer.observe(el));
     });
   </script>
 </body>

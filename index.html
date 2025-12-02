@@ -830,8 +830,14 @@
     display: none !important;
 }
       .cta-section {
-  display: none;
-      }
+  display: none !important;
+}
+
+.cta-section::before,
+.cta-section::after,
+.cta-section.parentSection {
+  display: none !important;
+}
 
 
       .price {

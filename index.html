@@ -65,15 +65,15 @@
     }
 
     .loader-deline {
-  color: var(--text); 
-}
+      color: var(--text); 
+    }
 
-.loader-cloud {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent; 
-}
+    .loader-cloud {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent; 
+    }
 
     .container {
       width: min(100%, 1200px);
@@ -241,47 +241,47 @@
       margin: 0 auto 2.5rem;
     }
 
-.hero-badges {
-  display: flex;
-  gap: 0.8rem;
-  margin-top: 2rem;
-  padding-bottom: 0.5rem;
-  overflow-x: auto;
-  justify-content: center;
-  scrollbar-width: thin;              
-}
+    .hero-badges {
+      display: flex;
+      gap: 0.8rem;
+      margin-top: 2rem;
+      padding-bottom: 0.5rem;
+      overflow-x: auto;
+      justify-content: center;
+      scrollbar-width: thin;              
+    }
 
-.hero-badges::-webkit-scrollbar {
-  height: 6px;
-}
-.hero-badges::-webkit-scrollbar-track {
-  background: transparent;
-}
-.hero-badges::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.6);
-  border-radius: 999px;
-}
+    .hero-badges::-webkit-scrollbar {
+      height: 6px;
+    }
+    .hero-badges::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .hero-badges::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.6);
+      border-radius: 999px;
+    }
 
-.badge {
-  background: rgba(56, 189, 248, 0.12);
-  border: 1px solid rgba(56, 189, 248, 0.35);
-  padding: 10px 16px;
-  border-radius: 50px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: var(--text);
-  white-space: nowrap;      
-  transition: var(--transition);
-}
+    .badge {
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      padding: 10px 16px;
+      border-radius: 50px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text);
+      white-space: nowrap;      
+      transition: var(--transition);
+    }
 
-.badge:hover {
-  transform: translateY(-3px);
-  background: rgba(56, 189, 248, 0.18);
-  border-color: var(--primary);
-}
+    .badge:hover {
+      transform: translateY(-3px);
+      background: rgba(56, 189, 248, 0.18);
+      border-color: var(--primary);
+    }
 
     .badge i {
       color: var(--primary);
@@ -738,7 +738,7 @@
     }
 
     .theme-toggle {
-  display: none !important;
+      display: none !important;
     }
 
     @media (max-width: 1024px) {
@@ -931,25 +931,11 @@
           </button>
         </div>
 
+        <!-- PANEL: Deline 1 lama dihapus, 2->1, 3->2, dst -->
         <div id="panel-package" class="package-container active">
           <div class="packages">
             <div class="package-card fade-in">
               <h3 class="package-name"><i class="fas fa-server"></i> Deline 1</h3>
-              <p class="package-description" style="color: var(--text-light); margin-bottom: 1rem; font-size: 0.9rem;">Paket dasar ideal untuk bot kecil atau project awal</p>
-              <ul class="package-specs">
-                <li><i class="fas fa-memory"></i> 1GB RAM</li>
-                <li><i class="fas fa-hdd"></i> 2GB Disk Space</li>
-                <li><i class="fas fa-microchip"></i> 100% CPU</li>
-                <li><i class="fas fa-shield-alt"></i> DDoS Protection</li>
-              </ul>
-              <p class="price">Rp 5.000<span class="price-period">/ bulan</span></p>
-              <button class="buy-btn" data-paket-id="panel-1">
-                <i class="fab fa-whatsapp"></i> Pesan Sekarang
-              </button>
-            </div>
-
-            <div class="package-card fade-in" style="transition-delay: 0.1s">
-              <h3 class="package-name"><i class="fas fa-server"></i> Deline 2</h3>
               <p class="package-description" style="color: var(--text-light); margin-bottom: 1rem; font-size: 0.9rem;">Cocok untuk bot menengah dengan traffic sedang</p>
               <ul class="package-specs">
                 <li><i class="fas fa-memory"></i> 2GB RAM</li>
@@ -958,14 +944,14 @@
                 <li><i class="fas fa-shield-alt"></i> DDoS Protection</li>
               </ul>
               <p class="price">Rp 10.000<span class="price-period">/ bulan</span></p>
-              <button class="buy-btn" data-paket-id="panel-2">
+              <button class="buy-btn" data-paket-id="panel-1">
                 <i class="fab fa-whatsapp"></i> Pesan Sekarang
               </button>
             </div>
 
-            <div class="package-card featured fade-in" style="transition-delay: 0.2s">
+            <div class="package-card featured fade-in" style="transition-delay: 0.1s">
               <span class="package-badge">POPULAR</span>
-              <h3 class="package-name"><i class="fas fa-server"></i> Deline 3</h3>
+              <h3 class="package-name"><i class="fas fa-server"></i> Deline 2</h3>
               <p class="package-description" style="color: var(--text-light); margin-bottom: 1rem; font-size: 0.9rem;">Pilihan tepat untuk bot dengan performa optimal</p>
               <ul class="package-specs">
                 <li><i class="fas fa-memory"></i> 3GB RAM</li>
@@ -974,13 +960,13 @@
                 <li><i class="fas fa-shield-alt"></i> DDoS Protection</li>
               </ul>
               <p class="price">Rp 15.000<span class="price-period">/ bulan</span></p>
-              <button class="buy-btn" data-paket-id="panel-3">
+              <button class="buy-btn" data-paket-id="panel-2">
                 <i class="fab fa-whatsapp"></i> Pesan Sekarang
               </button>
             </div>
 
-            <div class="package-card fade-in" style="transition-delay: 0.3s">
-              <h3 class="package-name"><i class="fas fa-server"></i> Deline 4</h3>
+            <div class="package-card fade-in" style="transition-delay: 0.2s">
+              <h3 class="package-name"><i class="fas fa-server"></i> Deline 3</h3>
               <p class="package-description" style="color: var(--text-light); margin-bottom: 1rem; font-size: 0.9rem;">Untuk kebutuhan yang membutuhkan resource lebih</p>
               <ul class="package-specs">
                 <li><i class="fas fa-memory"></i> 4GB RAM</li>
@@ -989,13 +975,13 @@
                 <li><i class="fas fa-shield-alt"></i> DDoS Protection</li>
               </ul>
               <p class="price">Rp 20.000<span class="price-period">/ bulan</span></p>
-              <button class="buy-btn" data-paket-id="panel-4">
+              <button class="buy-btn" data-paket-id="panel-3">
                 <i class="fab fa-whatsapp"></i> Pesan Sekarang
               </button>
             </div>
 
-            <div class="package-card fade-in" style="transition-delay: 0.4s">
-              <h3 class="package-name"><i class="fas fa-server"></i> Deline 5</h3>
+            <div class="package-card fade-in" style="transition-delay: 0.3s">
+              <h3 class="package-name"><i class="fas fa-server"></i> Deline 4</h3>
               <p class="package-description" style="color: var(--text-light); margin-bottom: 1rem; font-size: 0.9rem;">Paket power untuk projects yang membutuhkan performa tinggi</p>
               <ul class="package-specs">
                 <li><i class="fas fa-memory"></i> 5GB RAM</li>
@@ -1004,13 +990,13 @@
                 <li><i class="fas fa-shield-alt"></i> DDoS Protection</li>
               </ul>
               <p class="price">Rp 25.000<span class="price-period">/ bulan</span></p>
-              <button class="buy-btn" data-paket-id="panel-5">
+              <button class="buy-btn" data-paket-id="panel-4">
                 <i class="fab fa-whatsapp"></i> Pesan Sekarang
               </button>
             </div>
 
-            <div class="package-card fade-in" style="transition-delay: 0.5s">
-              <h3 class="package-name"><i class="fas fa-server"></i> Deline 6</h3>
+            <div class="package-card fade-in" style="transition-delay: 0.4s">
+              <h3 class="package-name"><i class="fas fa-server"></i> Deline 5</h3>
               <p class="package-description" style="color: var(--text-light); margin-bottom: 1rem; font-size: 0.9rem;">Ideal untuk server dengan traffic padat</p>
               <ul class="package-specs">
                 <li><i class="fas fa-memory"></i> 6GB RAM</li>
@@ -1019,13 +1005,13 @@
                 <li><i class="fas fa-shield-alt"></i> DDoS Protection</li>
               </ul>
               <p class="price">Rp 30.000<span class="price-period">/ bulan</span></p>
-              <button class="buy-btn" data-paket-id="panel-6">
+              <button class="buy-btn" data-paket-id="panel-5">
                 <i class="fab fa-whatsapp"></i> Pesan Sekarang
               </button>
             </div>
 
-            <div class="package-card fade-in" style="transition-delay: 0.6s">
-              <h3 class="package-name"><i class="fas fa-server"></i> Deline 7</h3>
+            <div class="package-card fade-in" style="transition-delay: 0.5s">
+              <h3 class="package-name"><i class="fas fa-server"></i> Deline 6</h3>
               <p class="package-description" style="color: var(--text-light); margin-bottom: 1rem; font-size: 0.9rem;">Solusi enterprise dengan resource maksimal</p>
               <ul class="package-specs">
                 <li><i class="fas fa-memory"></i> 7GB RAM</li>
@@ -1034,13 +1020,14 @@
                 <li><i class="fas fa-shield-alt"></i> DDoS Protection</li>
               </ul>
               <p class="price">Rp 35.000<span class="price-period">/ bulan</span></p>
-              <button class="buy-btn" data-paket-id="panel-7">
+              <button class="buy-btn" data-paket-id="panel-6">
                 <i class="fab fa-whatsapp"></i> Pesan Sekarang
               </button>
             </div>
           </div>
         </div>
 
+        <!-- VPS BALIK KE AWAL: 3 paket -->
         <div id="vps-package" class="package-container">
           <div class="packages">
             <div class="package-card fade-in">
@@ -1096,64 +1083,65 @@
       </div>
     </section>
 
-<section id="faq">
-  <div class="container">
-    <h2 class="section-title fade-in">Pertanyaan <span>Umum</span></h2>
-    <div class="faq-container">
+    <section id="faq">
+      <div class="container">
+        <h2 class="section-title fade-in">Pertanyaan <span>Umum</span></h2>
+        <div class="faq-container">
 
-      <div class="faq-item fade-in">
-        <button class="faq-question">
-          <span>Metode pembayaran apa saja yang diterima?</span>
-          <i class="fas fa-chevron-down"></i>
-        </button>
-        <div class="faq-answer">
-          <p>Kami menerima pembayaran melalui QRIS yang mencakup semua dompet digital seperti Dana, OVO, GoPay, dan juga mobile banking.</p>
+          <div class="faq-item fade-in">
+            <button class="faq-question">
+              <span>Metode pembayaran apa saja yang diterima?</span>
+              <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="faq-answer">
+              <p>Kami menerima pembayaran melalui QRIS yang mencakup semua dompet digital seperti Dana, OVO, GoPay, dan juga mobile banking.</p>
+            </div>
+          </div>
+
+          <div class="faq-item fade-in">
+            <button class="faq-question">
+              <span>Berapa lama proses aktivasi server setelah pembayaran?</span>
+              <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="faq-answer">
+              <p>Server akan langsung aktif dalam hitungan menit setelah pembayaran Anda berhasil dikonfirmasi.</p>
+            </div>
+          </div>
+
+          <div class="faq-item fade-in">
+            <button class="faq-question">
+              <span>Apakah ada kebijakan refund?</span>
+              <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="faq-answer">
+              <p>Kami tidak menyediakan refund setelah server diaktifkan. Namun, kami memberikan garansi layanan sesuai ketentuan yang berlaku.</p>
+            </div>
+          </div>
+
+          <div class="faq-item fade-in">
+            <button class="faq-question">
+              <span>Apakah layanan bisa diperpanjang?</span>
+              <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="faq-answer">
+              <p>Tentu, layanan bisa diperpanjang kapan saja sebelum masa aktif habis. Cukup hubungi admin untuk memperpanjang masa aktif server Anda.</p>
+            </div>
+          </div>
+
+          <div class="faq-item fade-in">
+            <button class="faq-question">
+              <span>Bagaimana cara mendapatkan bantuan teknis?</span>
+              <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="faq-answer">
+              <p>Anda dapat menghubungi tim support kami melalui WhatsApp yang tersedia 24/7 untuk bantuan teknis.</p>
+            </div>
+          </div>
+
         </div>
       </div>
-
-      <div class="faq-item fade-in">
-        <button class="faq-question">
-          <span>Berapa lama proses aktivasi server setelah pembayaran?</span>
-          <i class="fas fa-chevron-down"></i>
-        </button>
-        <div class="faq-answer">
-          <p>Server akan langsung aktif dalam hitungan menit setelah pembayaran Anda berhasil dikonfirmasi.</p>
-        </div>
-      </div>
-
-      <div class="faq-item fade-in">
-        <button class="faq-question">
-          <span>Apakah ada kebijakan refund?</span>
-          <i class="fas fa-chevron-down"></i>
-        </button>
-        <div class="faq-answer">
-          <p>Kami tidak menyediakan refund setelah server diaktifkan. Namun, kami memberikan garansi layanan sesuai ketentuan yang berlaku.</p>
-        </div>
-      </div>
-
-      <div class="faq-item fade-in">
-        <button class="faq-question">
-          <span>Apakah layanan bisa diperpanjang?</span>
-          <i class="fas fa-chevron-down"></i>
-        </button>
-        <div class="faq-answer">
-          <p>Tentu, layanan bisa diperpanjang kapan saja sebelum masa aktif habis. Cukup hubungi admin untuk memperpanjang masa aktif server Anda.</p>
-        </div>
-      </div>
-
-      <div class="faq-item fade-in">
-        <button class="faq-question">
-          <span>Bagaimana cara mendapatkan bantuan teknis?</span>
-          <i class="fas fa-chevron-down"></i>
-        </button>
-        <div class="faq-answer">
-          <p>Anda dapat menghubungi tim support kami melalui WhatsApp yang tersedia 24/7 untuk bantuan teknis.</p>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
+    </section>
+  </main>
 
   <footer>
     <div class="container">
@@ -1187,7 +1175,6 @@
         'panel-4': true,
         'panel-5': true,
         'panel-6': true,
-        'panel-7': true,
         'vps-1': true,
         'vps-2': true,
         'vps-3': true,
